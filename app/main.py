@@ -111,6 +111,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     login_btn = driver.find_element(By.XPATH, "//button[contains(text(),'Войти')]")
                     login_btn.click()
                     driver.get("https://agropraktika.eu/user/profile")
+                    time.sleep(5)
                     print({'current url': driver.current_url})
                     # Wait for the page to load after login and get the current URL
                     
