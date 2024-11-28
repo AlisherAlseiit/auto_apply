@@ -70,7 +70,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
             html_text = driver.page_source
             soup = BeautifulSoup(html_text, 'lxml')
-            print({"message2": soup})
+            # print({"message2": soup})
             # Find all the job vacancies on the page
             vacancies = soup.find_all('li', class_="vacancy-item")
             print(f"vacancies size: {len(vacancies)}")
@@ -87,9 +87,10 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     db.commit()
                     db.refresh(new_vacancy)
 
-                    main_html = driver.get("https://agropraktika.eu/")  
-                    soup = BeautifulSoup(main_html, 'lxml')
-                    print({"message": soup})
+                    driver.get("https://agropraktika.eu/")  
+                    main_html = driver.page_source
+                    soup_second = BeautifulSoup(main_html, 'lxml')
+                    print({"message": soup_second})
 
                     WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.NAME, "email"))) 
                     # Find the login and password input fields and fill them in
