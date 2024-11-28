@@ -50,7 +50,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
             vacancy_name = vacancy.find('h4', class_="mb-2").text
             vacancy_link = vacancy.a['href']
             vacancy_start_date = vacancy.find('div', class_="italic text-gray-400").text
-            is_vacancy_closed = vacancy.find('p', string="Регистрация временно приостановлена")
+            is_vacancy_closed = vacancy.find('p', string="Регистрация временно приостановлен")
 
             # if vacancy is open
             if not is_vacancy_closed:
