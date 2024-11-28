@@ -77,7 +77,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
             html_text = driver.page_source
             soup = BeautifulSoup(html_text, 'lxml')
-            # print({"message2": soup})
+            
             # Find all the job vacancies on the page
             vacancies = soup.find_all('li', class_="vacancy-item")
             print(f"vacancies size: {len(vacancies)}")
@@ -92,26 +92,22 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     new_vacancy = models.Vacancy(email=e, name=vacancy_name, link=vacancy_link, start=vacancy_start_date) 
                     
                     driver.get("https://agropraktika.eu/")  
-                    main_html = driver.page_source
-                    soup_second = BeautifulSoup(main_html, 'lxml')
-                    print({"message": soup_second})
 
                     WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.NAME, "email"))) 
                     # Find the login and password input fields and fill them in
                     email_input = driver.find_element(By.NAME, "email")
                     email_input.send_keys(e)
-                    print({'e': e})
+                    
                     password_input = driver.find_element(By.NAME, "password")
                     password_input.send_keys(p)
-                    print({'p': p})
                     
-                    # login_btn = driver.find_element(By.ID, "ugo1")
+                
                     # login_btn = driver.find_element(By.XPATH, "//button[contains(text(),'Войти')]")
                     login_btn = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Войти')]")))
                     login_btn.click()
                     
-                    # time.sleep(5)
-                    # driver.get("https://agropraktika.eu/user/profile")
+                    time.sleep(5)
+                    driver.get("https://agropraktika.eu/user/profile")
                     
                     print({'current url': driver.current_url})
                     # Wait for the page to load after login and get the current URL
