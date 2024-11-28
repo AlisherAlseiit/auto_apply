@@ -123,7 +123,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                 
                 driver.quit()
     else:
-        print("already applied")
+        print("already applied!")
 
 
 
