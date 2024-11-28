@@ -39,6 +39,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
     if not is_full :
         
+        # This part for bypass bot-blocker no site
         options = Options()
         options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
 
@@ -50,7 +51,8 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-sh-usage")
         options.add_argument('--window-size=1420,1080')
-
+        # 
+        
         service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
 
         driver = webdriver.Chrome(service=service, options=options)
@@ -58,22 +60,16 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         # URL of the website to scrape
         url = "https://agropraktika.eu/vacancies?l=united-kingdom"
 
-        
         driver.get(url)
-        time.sleep(5)
+        time.sleep(1)
 
         html_text = driver.page_source
-
         soup = BeautifulSoup(html_text, 'lxml')
-        print("im passed through here x1")
-
+        
         # Find all the job vacancies on the page
         vacancies = soup.find_all('li', class_="vacancy-item")
         print(vacancies)
-        print({"message": html_text})
-        print({"message2": soup})
         for vacancy in vacancies:
-            print("im passed through here x2")
             vacancy_name = vacancy.find('h4', class_="mb-2").text
             vacancy_link = vacancy.a['href']
             vacancy_start_date = vacancy.find('div', class_="italic text-gray-400").text
@@ -81,20 +77,11 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
             # if vacancy is open
             if  is_vacancy_closed:
-                print("im passed through here x3")
                 new_vacancy = models.Vacancy(email=e, name=vacancy_name, link=vacancy_link, start=vacancy_start_date) 
                 db.add(new_vacancy)
                 db.commit()
                 db.refresh(new_vacancy)
-                print("im passed through here x4")
-                # chromedriver path
-                # chromedriver_path = "chromedriver.exe"
 
-                # Path of chromedriver
-                # service = Service(executable_path=chromedriver_path)
-
-                # Create a new instance of the Chrome driver
-                # driver = webdriver.Chrome(service=service)
                 driver.get("https://agropraktika.eu/")  
 
                 # Find the login and password input fields and fill them in
@@ -127,8 +114,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     break
                 else:
                     print("Couldn't login") 
-                
-                driver.quit()
+        driver.quit()        
     else:
         print("already applied!")
 
@@ -158,19 +144,9 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
     # URL of the website to scrape
     url = "https://agropraktika.eu/vacancies?l=united-kingdom"
 
-    
     driver.get(url)
     time.sleep(1)
 
-
-    # try:
-    #     alert = Alert(driver)
-    #     alert.accept()  # Принять alert
-    #     print("Alert was accepted.")
-    # except:
-    #     print("No alert found")
-
-    
     html_text = driver.page_source
     soup = BeautifulSoup(html_text, 'lxml')
     print("im passed through here x1")
