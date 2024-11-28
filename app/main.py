@@ -41,12 +41,6 @@ def url_to_be_any_of(*urls):
      
 @app.get("/apply")
 def apply(e: str, p: str, db: Session = Depends(get_db)):
-    payload = {
-            "token": settings.api_token,  # Ваш API токен
-            "user": settings.user_key,  # Ваш User ключ
-            "message": "Ваша заявка была подана. Пожалуйста, проверьте сайт Агропрактики. С уважением, Ваш спаситель, Неж."
-        }
-    requests.post("https://api.pushover.net:443/1/messages.json", data=payload)
     driver = None
     try:
         # check if bot already applied for a job for this email
@@ -133,8 +127,24 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                         db.commit()
                         db.refresh(new_vacancy)
 
+                         #  sending notification using pushover
+                        payload = {
+                            "token": settings.api_token,  # Ваш API токен
+                            "user": settings.user_key,  # Ваш User ключ
+                            "message": "Ваша заявка была подана. Пожалуйста, проверьте сайт Агропрактики. С уважением, Ваш спаситель, Неж."
+                        }
+                        requests.post("https://api.pushover.net:443/1/messages.json", data=payload)
+
                         return {"message": f"job successfully applied for user {e}"}
                     else:
+                         #  sending notification using pushover
+                        payload = {
+                            "token": settings.api_token,  # Ваш API токен
+                            "user": settings.user_key,  # Ваш User ключ
+                            "message": "Ваша заявка была подана. Но возникли проблемы при регистрации" 
+                        }
+                        requests.post("https://api.pushover.net:443/1/messages.json", data=payload)
+
                         print("Couldn't login") 
                         return {"message": f"ERORR WHILE LOGIN IN {e} {driver.current_url}"}        
         else:
@@ -143,18 +153,10 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         if driver:
             driver.quit()
         
-        #  sending notification using pushover
-        payload = {
-            "token": settings.api_token,  # Ваш API токен
-            "user": settings.user_key,  # Ваш User ключ
-            "message": "Ваша заявка была подана. Пожалуйста, проверьте сайт Агропрактики. С уважением, Ваш спаситель, Неж."
-        }
-        requests.post("https://api.pushover.net:443/1/messages.json", data=payload)
+       
             
     
-        
-
-
+    
 
 @app.get("/test")
 def apply(e: str, p: str, db: Session = Depends(get_db)):
