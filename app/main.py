@@ -59,6 +59,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument('--window-size=1420,1080')
             options.add_argument("--remote-debugging-port=9222")
+            options.add_argument("--incognito")
             # options.add_argument("--disable-software-rasterizer")
             # 
             
@@ -112,7 +113,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     login_btn = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Войти')]")))
                     login_btn.click()
                     
-                    
+                    time.sleep(5)
                     driver.get("https://agropraktika.eu/user/profile")
                     
                     print({'current url': driver.current_url})
