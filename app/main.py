@@ -110,12 +110,12 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                         # Redirect to new vacancy's link
                         driver.get(new_vacancy.link)
 
-                        # wait for the page load
-                        wait.until(EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
+                        # # wait for the page load
+                        # wait.until(EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
 
-                        # tap to apply button
-                        apply_button = driver.find_element(By.XPATH, "//button[contains(text(),'Подать заявку')]")
-                        apply_button.click()
+                        # # tap to apply button
+                        # apply_button = driver.find_element(By.XPATH, "//button[contains(text(),'Подать заявку')]")
+                        # apply_button.click()
                         break
                     else:
                         print("Couldn't login") 
