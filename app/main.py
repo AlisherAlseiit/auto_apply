@@ -50,7 +50,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
             vacancy_name = vacancy.find('h4', class_="mb-2").text
             vacancy_link = vacancy.a['href']
             vacancy_start_date = vacancy.find('div', class_="italic text-gray-400").text
-            is_vacancy_closed = vacancy.find('p', string="Регистрация временно приостановлен")
+            is_vacancy_closed = vacancy.find('p', string="Регистрация временно приостановлена")
 
             # if vacancy is open
             if not is_vacancy_closed:
@@ -86,17 +86,17 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
                 # Check if the current URL redirected to url
                 if driver.current_url == "https://agropraktika.eu/user/profile":
-                    print("Login successful!!!")
+                    print("Login successful!")
 
                     # Redirect to new vacancy's link
                     driver.get(new_vacancy.link)
 
-                    # # wait for the page load
-                    # wait.until(EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
+                    # wait for the page load
+                    wait.until(EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
 
-                    # # tap to apply button
-                    # apply_button = driver.find_element(By.XPATH, "//button[contains(text(),'Подать заявку')]")
-                    # apply_button.click()
+                    # tap to apply button
+                    apply_button = driver.find_element(By.XPATH, "//button[contains(text(),'Подать заявку')]")
+                    apply_button.click()
                     break
                 else:
                     print("Couldn't login") 
