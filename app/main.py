@@ -108,7 +108,11 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
 
 @app.get('/test')
-def test():
+def test(e: str, p: str, db: Session = Depends(get_db)):
+    new_vacancy = models.Vacancy(email=e, name="vacancy_name", link="vacancy_link", start="vacancy_start_date") 
+    db.add(new_vacancy)
+    db.commit()
+    db.refresh(new_vacancy)
     print("for testing only")
     return {"message": "success"}
 
