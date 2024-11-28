@@ -51,9 +51,10 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
             options.add_argument("--headless")  # Запуск в фоновом режиме
             options.add_argument("--disable-gpu")
             options.add_argument("--no-sandbox")
-            options.add_argument("--disable-dev-sh-usage")
+            options.add_argument("--disable-dev-shь-usage")
             options.add_argument('--window-size=1420,1080')
-            options.add_argument("--disable-software-rasterizer")
+            options.add_argument("--remote-debugging-port=9222")
+            # options.add_argument("--disable-software-rasterizer")
             # 
             
             service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
@@ -106,7 +107,9 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     # Wait for the page to load after login and get the current URL
                     
                     WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.ID, "photo"))) 
-
+                    last_html = driver.page_source
+                    soup_last = BeautifulSoup(last_html, 'lxml')
+                    print({"messi": soup_last})
                     # Check if the current URL redirected to url
                     if driver.current_url == "https://agropraktika.eu/user/profile":
                         print("Login successful!")
