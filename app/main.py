@@ -70,7 +70,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
             html_text = driver.page_source
             soup = BeautifulSoup(html_text, 'lxml')
-            
+            print({"message2": soup})
             # Find all the job vacancies on the page
             vacancies = soup.find_all('li', class_="vacancy-item")
             print(f"vacancies size: {len(vacancies)}")
@@ -125,7 +125,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
     finally:
         if driver:
             driver.quit()
-            driver.delete_all_cookies()
+            
     
         
 
