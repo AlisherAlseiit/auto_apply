@@ -35,11 +35,15 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
     is_full = db.query(models.Vacancy).filter(models.Vacancy.email == e).all()
 
     if not is_full :
-        chromedriver_path = "chromedriver.exe"
+        # chromedriver_path = "chromedriver.exe"
         options = Options()
         options.add_argument("--headless")  # Запуск в фоновом режиме
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
+        options.binary_location = '/app/.apt/usr/bin/google-chrome-stable'
+
+        chromedriver_path = "/app/.chromedriver/bin/chromedriver"
+
         service = Service(executable_path=chromedriver_path)
 
         driver = webdriver.Chrome(service=service, options=options)
