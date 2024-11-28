@@ -42,6 +42,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         options.add_argument("--headless")  # Запуск в фоновом режиме
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-sh-usage")
         options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
 
         # chromedriver_path = "/app/.chromedriver/bin/chromedriver"
@@ -55,7 +56,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
         
         driver.get(url)
-        time.sleep(1)
+        time.sleep(5)
 
         html_text = driver.page_source
 
