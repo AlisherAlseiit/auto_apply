@@ -64,7 +64,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
             url = "https://agropraktika.eu/vacancies?l=united-kingdom"
             driver.get(url)
             
-            WebDriverWait(driver, 30).until(
+            WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CLASS_NAME, "vacancy-item"))
             )
 
@@ -87,11 +87,11 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     db.commit()
                     db.refresh(new_vacancy)
 
-                    driver.get("https://agropraktika.eu/")  
-                    soup = BeautifulSoup(html_text, 'lxml')
+                    main_html = driver.get("https://agropraktika.eu/")  
+                    soup = BeautifulSoup(main_html, 'lxml')
                     print({"message": soup})
 
-                    WebDriverWait(driver, 30).until(EC.visibility_of_all_elements_located((By.NAME, "email"))) 
+                    WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.NAME, "email"))) 
                     # Find the login and password input fields and fill them in
                     email_input = driver.find_element(By.NAME, "email")
                     email_input.send_keys(e)
