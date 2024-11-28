@@ -51,6 +51,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-sh-usage")
         options.add_argument('--window-size=1420,1080')
+        options.add_argument("--disable-software-rasterizer")
         # 
         
         service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
@@ -59,16 +60,18 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
         # URL of the website to scrape
         url = "https://agropraktika.eu/vacancies?l=united-kingdom"
-
         driver.get(url)
-        time.sleep(1)
+        
+        WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, "vacancy-item"))
+)
 
         html_text = driver.page_source
         soup = BeautifulSoup(html_text, 'lxml')
         
         # Find all the job vacancies on the page
         vacancies = soup.find_all('li', class_="vacancy-item")
-        print(vacancies)
+        print(f"vacancies size: {vacancies.count}")
         for vacancy in vacancies:
             vacancy_name = vacancy.find('h4', class_="mb-2").text
             vacancy_link = vacancy.a['href']
