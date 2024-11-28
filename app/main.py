@@ -105,7 +105,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
                     # Wait for the page to load after login and get the current URL
                     
-                    WebDriverWait(driver, 30).until(EC.visibility_of_all_elements_located((By.ID, "photo"))) 
+                    WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.ID, "photo"))) 
 
                     # Check if the current URL redirected to url
                     if driver.current_url == "https://agropraktika.eu/user/profile":
