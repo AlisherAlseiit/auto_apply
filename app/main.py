@@ -10,6 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.alert import Alert
 import os
 
 
@@ -130,14 +131,57 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
 
 
-@app.get('/test')
-def test(e: str, p: str, db: Session = Depends(get_db)):
-    new_vacancy = models.Vacancy(email=e, name="vacancy_name", link="vacancy_link", start="vacancy_start_date") 
-    db.add(new_vacancy)
-    db.commit()
-    db.refresh(new_vacancy)
-    print("for testing only")
-    return {"message": "success"}
+@app.get("/test")
+def apply(e: str, p: str, db: Session = Depends(get_db)):
+   
+
+   
+   
+    options = Options()
+    options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+    options.add_argument("--headless")  # Запуск в фоновом режиме
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-sh-usage")
+    
+
+    service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
+
+    driver = webdriver.Chrome(service=service, options=options)
+
+    # URL of the website to scrape
+    url = "https://agropraktika.eu/vacancies?l=united-kingdom"
+
+    
+    driver.get(url)
+    time.sleep(5)
+
+
+    try:
+        alert = Alert(driver)
+        alert.accept()  # Принять alert
+        print("Alert was accepted.")
+    except:
+        print("No alert found")
+
+    
+    html_text = driver.page_source
+    soup = BeautifulSoup(html_text, 'lxml')
+    print("im passed through here x1")
+
+    # Find all the job vacancies on the page
+    vacancies = soup.find_all('li', class_="vacancy-item")
+    print(vacancies)
+    print({"message2": soup})
+
+    driver.quit()
+      
+    
+    
+
+
+
+
 
 
 
