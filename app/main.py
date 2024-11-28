@@ -80,7 +80,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
             
             # Find all the job vacancies on the page
             vacancies = soup.find_all('li', class_="vacancy-item")
-            print(f"vacancies size: {len(vacancies)}")
+            
             for vacancy in vacancies:
                 vacancy_name = vacancy.find('h4', class_="mb-2").text
                 vacancy_link = vacancy.a['href']
@@ -88,7 +88,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                 is_vacancy_closed = vacancy.find('p', string="Регистрация временно приостановлена")
 
                 # if vacancy is open
-                if  is_vacancy_closed:
+                if not is_vacancy_closed:
                     new_vacancy = models.Vacancy(email=e, name=vacancy_name, link=vacancy_link, start=vacancy_start_date) 
                     
                     driver.get("https://agropraktika.eu/")  
@@ -107,7 +107,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     time.sleep(5)
                     driver.get("https://agropraktika.eu/user/profile")
                     
-                    print({'current url': driver.current_url})
+
                     # Wait for the page to load after login and get the current URL
                     
                     WebDriverWait(driver, 20).until(url_to_be_any_of("https://agropraktika.eu/user/profile", "https://agropraktika.eu/user/applications"))
@@ -118,8 +118,8 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                         driver.get(new_vacancy.link)
 
                         # tap to apply button
-                        # apply_button = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
-                        # apply_button.click()
+                        apply_button = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
+                        apply_button.click()
 
                         db.add(new_vacancy)
                         db.commit()
