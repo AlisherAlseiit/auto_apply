@@ -101,8 +101,11 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     password_input = driver.find_element(By.NAME, "password")
                     password_input.send_keys(p)
                     print({'p': p})
-                    login_btn = driver.find_element(By.ID, "ugo1")
+                    
+                    # login_btn = driver.find_element(By.ID, "ugo1")
+                    login_btn = driver.find_element(By.XPATH, "//button[contains(text(),'Войти')]")
                     login_btn.click()
+
                     print({'current url': driver.current_url})
                     # Wait for the page to load after login and get the current URL
                     
