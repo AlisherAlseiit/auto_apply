@@ -89,9 +89,9 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     db.refresh(new_vacancy)
 
                     driver.get("https://agropraktika.eu/")  
-                    main_html = driver.page_source
-                    soup_second = BeautifulSoup(main_html, 'lxml')
-                    print({"message": soup_second})
+                    # main_html = driver.page_source
+                    # soup_second = BeautifulSoup(main_html, 'lxml')
+                    # print({"message": soup_second})
 
                     WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.NAME, "email"))) 
                     # Find the login and password input fields and fill them in
