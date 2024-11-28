@@ -120,7 +120,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     # print({"messi": soup_last})
                     # Check if the current URL redirected to url
                     WebDriverWait(driver, 20).until(url_to_be_any_of("https://agropraktika.eu/user/profile", "https://agropraktika.eu/user/applications"))
-                    if driver.current_url in ["https://agropraktika.eu/user/applications", "https://agropraktika.eu/user/applications"]:
+                    if driver.current_url in ["https://agropraktika.eu/user/profile", "https://agropraktika.eu/user/applications"]:
                         print("Login successful!")
 
                         # Redirect to new vacancy's link
