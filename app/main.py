@@ -41,25 +41,26 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         # Make a GET request to the website and parse the HTML using Beautiful Soup
         html_text = requests.get(url).text
         soup = BeautifulSoup(html_text, 'lxml')
+        print("im passed through here x1")
 
         # Find all the job vacancies on the page
         vacancies = soup.find_all('li', class_="vacancy-item")
 
         for vacancy in vacancies:
-
+            print("im passed through here x2")
             vacancy_name = vacancy.find('h4', class_="mb-2").text
             vacancy_link = vacancy.a['href']
             vacancy_start_date = vacancy.find('div', class_="italic text-gray-400").text
-            is_vacancy_closed = vacancy.find('p', string="Регистрация временно приостановлен")
+            is_vacancy_closed = vacancy.find('p', string="Регистрация временно приостановлена")
 
             # if vacancy is open
-            if not is_vacancy_closed:
-                
+            if  is_vacancy_closed:
+                print("im passed through here x3")
                 new_vacancy = models.Vacancy(email=e, name=vacancy_name, link=vacancy_link, start=vacancy_start_date) 
                 db.add(new_vacancy)
                 db.commit()
                 db.refresh(new_vacancy)
-
+                print("im passed through here x4")
                 # chromedriver path
                 chromedriver_path = "chromedriver.exe"
 
