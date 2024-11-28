@@ -38,15 +38,20 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         # URL of the website to scrape
         url = "https://agropraktika.eu/vacancies?l=united-kingdom"
 
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
         # Make a GET request to the website and parse the HTML using Beautiful Soup
-        html_text = requests.get(url).text
+        html_text = requests.get(url, headers=headers).text
         soup = BeautifulSoup(html_text, 'lxml')
         print("im passed through here x1")
 
         # Find all the job vacancies on the page
         vacancies = soup.find_all('li', class_="vacancy-item")
         print(vacancies)
-        print({"message": soup})
+        print({"message": html_text})
+        print({"message2": soup})
         for vacancy in vacancies:
             print("im passed through here x2")
             vacancy_name = vacancy.find('h4', class_="mb-2").text
