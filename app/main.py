@@ -31,7 +31,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-      
+def url_to_be_any_of(*urls):
+    def _predicate(driver):
+        current_url = driver.current_url
+        return current_url in urls
+    return _predicate
+     
 @app.get("/apply")
 def apply(e: str, p: str, db: Session = Depends(get_db)):
     driver = None
@@ -93,7 +98,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     soup_second = BeautifulSoup(main_html, 'lxml')
                     print({"message": soup_second})
 
-                    WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.NAME, "email"))) 
+                    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.NAME, "email"))) 
                     # Find the login and password input fields and fill them in
                     email_input = driver.find_element(By.NAME, "email")
                     email_input.send_keys(e)
@@ -114,6 +119,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     # soup_last = BeautifulSoup(last_html, 'lxml')
                     # print({"messi": soup_last})
                     # Check if the current URL redirected to url
+                    WebDriverWait(driver, 20).until(url_to_be_any_of("https://agropraktika.eu/user/profile", "https://agropraktika.eu/user/applications"))
                     if driver.current_url in ["https://agropraktika.eu/user/applications", "https://agropraktika.eu/user/applications"]:
                         print("Login successful!")
 
