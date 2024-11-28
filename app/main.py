@@ -56,6 +56,9 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         
         service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
 
+        if driver:
+            driver.quit()
+            driver.delete_all_cookies()
         driver = webdriver.Chrome(service=service, options=options)
 
         # URL of the website to scrape
@@ -71,7 +74,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         
         # Find all the job vacancies on the page
         vacancies = soup.find_all('li', class_="vacancy-item")
-        print(f"vacancies size: {vacancies.count}")
+        print(f"vacancies size: {vacancies.count()}")
         for vacancy in vacancies:
             vacancy_name = vacancy.find('h4', class_="mb-2").text
             vacancy_link = vacancy.a['href']
