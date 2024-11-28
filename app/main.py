@@ -90,10 +90,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                 # if vacancy is open
                 if  is_vacancy_closed:
                     new_vacancy = models.Vacancy(email=e, name=vacancy_name, link=vacancy_link, start=vacancy_start_date) 
-                    db.add(new_vacancy)
-                    db.commit()
-                    db.refresh(new_vacancy)
-
+                    
                     driver.get("https://agropraktika.eu/")  
                     main_html = driver.page_source
                     soup_second = BeautifulSoup(main_html, 'lxml')
@@ -113,17 +110,13 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     login_btn = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Войти')]")))
                     login_btn.click()
                     
-                    time.sleep(5)
-                    driver.get("https://agropraktika.eu/user/profile")
+                    # time.sleep(5)
+                    # driver.get("https://agropraktika.eu/user/profile")
                     
                     print({'current url': driver.current_url})
                     # Wait for the page to load after login and get the current URL
                     
-                    # WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.ID, "photo"))) 
-                    # last_html = driver.page_source
-                    # soup_last = BeautifulSoup(last_html, 'lxml')
-                    # print({"messi": soup_last})
-                    # Check if the current URL redirected to url
+                
                     WebDriverWait(driver, 20).until(url_to_be_any_of("https://agropraktika.eu/user/profile", "https://agropraktika.eu/user/applications"))
                     if driver.current_url in ["https://agropraktika.eu/user/profile", "https://agropraktika.eu/user/applications"]:
                         print("Login successful!")
@@ -137,6 +130,11 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                         # # tap to apply button
                         # apply_button = driver.find_element(By.XPATH, "//button[contains(text(),'Подать заявку')]")
                         # apply_button.click()
+
+                        db.add(new_vacancy)
+                        db.commit()
+                        db.refresh(new_vacancy)
+
                         return {"message": f"job successfully applied for user {e}"}
                     else:
                         print("Couldn't login") 
