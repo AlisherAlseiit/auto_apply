@@ -86,7 +86,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
                 # Check if the current URL redirected to url
                 if driver.current_url == "https://agropraktika.eu/user/profile":
-                    print("Login successful!")
+                    print("Login successful!!!")
 
                     # Redirect to new vacancy's link
                     driver.get(new_vacancy.link)
