@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     database_name: str
     database_username: str
 
+    user_key: str
+    api_token: str
+    
     class Config:
         env_file = ".env"
 

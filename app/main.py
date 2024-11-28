@@ -12,10 +12,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.alert import Alert
 import os
-
+import requests
+import http.client, urllib
 
 from .database import get_db, engine
 from . import models
+from .config import settings
 
 import time
 
@@ -39,6 +41,12 @@ def url_to_be_any_of(*urls):
      
 @app.get("/apply")
 def apply(e: str, p: str, db: Session = Depends(get_db)):
+    payload = {
+            "token": settings.api_token,  # Ваш API токен
+            "user": settings.user_key,  # Ваш User ключ
+            "message": "Ваша заявка была подана. Пожалуйста, проверьте сайт Агропрактики. С уважением, Ваш спаситель, Неж."
+        }
+    requests.post("https://api.pushover.net:443/1/messages.json", data=payload)
     driver = None
     try:
         # check if bot already applied for a job for this email
@@ -134,6 +142,14 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
     finally:
         if driver:
             driver.quit()
+        
+        #  sending notification using pushover
+        payload = {
+            "token": settings.api_token,  # Ваш API токен
+            "user": settings.user_key,  # Ваш User ключ
+            "message": "Ваша заявка была подана. Пожалуйста, проверьте сайт Агропрактики. С уважением, Ваш спаситель, Неж."
+        }
+        requests.post("https://api.pushover.net:443/1/messages.json", data=payload)
             
     
         
@@ -177,7 +193,27 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
     print({"message2": soup})
 
     driver.quit()
-      
+
+
+@app.get('/pushover')
+def pushover():
+    try:    
+        payload = {
+            "token": settings.api_token,  # Ваш API токен
+            "user": settings.user_key,  # Ваш User ключ
+            "message": "Ваша заявка была подана. Пожалуйста, проверьте сайт Агропрактики. С уважением, Ваш спаситель, Неж."
+        }
+        
+        response = requests.post("https://api.pushover.net:443/1/messages.json", data=payload)
+
+        if response.status_code == 200:
+            return {"message": "Your notification sent"}
+        else:
+            return {"message": f"Error occurred: {response.status_code}, {response.text}"}
+
+    except:
+        return {"message": "Error accured while sending notificaiton"}
+
     
     
 
