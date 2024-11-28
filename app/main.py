@@ -10,6 +10,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+import os
+
 
 from .database import get_db, engine
 from . import models
@@ -40,11 +42,11 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
         options.add_argument("--headless")  # Запуск в фоновом режиме
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
-        options.binary_location = '/app/.apt/usr/bin/google-chrome-stable'
+        options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
 
-        chromedriver_path = "/app/.chromedriver/bin/chromedriver"
+        # chromedriver_path = "/app/.chromedriver/bin/chromedriver"
 
-        service = Service(executable_path=chromedriver_path)
+        service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
 
         driver = webdriver.Chrome(service=service, options=options)
 
