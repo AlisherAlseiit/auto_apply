@@ -38,15 +38,18 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
     is_full = db.query(models.Vacancy).filter(models.Vacancy.email == e).all()
 
     if not is_full :
-        # chromedriver_path = "chromedriver.exe"
+        
         options = Options()
+        options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+
+        options.add_argument(f"user-agent={user_agent}")
         options.add_argument("--headless")  # Запуск в фоновом режиме
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-sh-usage")
-        options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
-
-        # chromedriver_path = "/app/.chromedriver/bin/chromedriver"
+        options.add_argument('--window-size=1420,1080')
 
         service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
 
@@ -135,8 +138,6 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 def apply(e: str, p: str, db: Session = Depends(get_db)):
    
 
-   
-   
     options = Options()
     options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
 
@@ -159,15 +160,15 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
     
     driver.get(url)
-    time.sleep(5)
+    time.sleep(1)
 
 
-    try:
-        alert = Alert(driver)
-        alert.accept()  # Принять alert
-        print("Alert was accepted.")
-    except:
-        print("No alert found")
+    # try:
+    #     alert = Alert(driver)
+    #     alert.accept()  # Принять alert
+    #     print("Alert was accepted.")
+    # except:
+    #     print("No alert found")
 
     
     html_text = driver.page_source
