@@ -64,7 +64,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
             url = "https://agropraktika.eu/vacancies?l=united-kingdom"
             driver.get(url)
             
-            WebDriverWait(driver, 10).until(
+            WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.CLASS_NAME, "vacancy-item"))
             )
 
@@ -101,7 +101,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
                     # Wait for the page to load after login and get the current URL
                     
-                    WebDriverWait.until(EC.visibility_of_all_elements_located((By.ID, "photo"))) 
+                    WebDriverWait(driver, 30).until(EC.visibility_of_all_elements_located((By.ID, "photo"))) 
 
                     # Check if the current URL redirected to url
                     if driver.current_url == "https://agropraktika.eu/user/profile":
@@ -111,7 +111,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                         driver.get(new_vacancy.link)
 
                         # # wait for the page load
-                        # WebDriverWait.until(EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
+                        # WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
 
                         # # tap to apply button
                         # apply_button = driver.find_element(By.XPATH, "//button[contains(text(),'Подать заявку')]")
