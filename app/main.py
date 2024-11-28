@@ -101,8 +101,6 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     password_input = driver.find_element(By.NAME, "password")
                     password_input.send_keys(p)
                     
-                
-                    # login_btn = driver.find_element(By.XPATH, "//button[contains(text(),'Войти')]")
                     login_btn = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Войти')]")))
                     login_btn.click()
                     
@@ -112,7 +110,6 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     print({'current url': driver.current_url})
                     # Wait for the page to load after login and get the current URL
                     
-                
                     WebDriverWait(driver, 20).until(url_to_be_any_of("https://agropraktika.eu/user/profile", "https://agropraktika.eu/user/applications"))
                     if driver.current_url in ["https://agropraktika.eu/user/profile", "https://agropraktika.eu/user/applications"]:
                         print("Login successful!")
@@ -120,11 +117,8 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                         # Redirect to new vacancy's link
                         driver.get(new_vacancy.link)
 
-                        # # wait for the page load
-                        # WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
-
-                        # # tap to apply button
-                        # apply_button = driver.find_element(By.XPATH, "//button[contains(text(),'Подать заявку')]")
+                        # tap to apply button
+                        # apply_button = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Подать заявку')]")))
                         # apply_button.click()
 
                         db.add(new_vacancy)
