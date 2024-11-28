@@ -139,10 +139,15 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
    
     options = Options()
     options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+
+    options.add_argument(f"user-agent={user_agent}")
     options.add_argument("--headless")  # Запуск в фоновом режиме
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-sh-usage")
+    options.add_argument('--window-size=1420,1080')
     
 
     service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
