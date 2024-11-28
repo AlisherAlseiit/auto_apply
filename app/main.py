@@ -9,11 +9,12 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.webdriver.chrome.options import Options
 
 from .database import get_db, engine
 from . import models
 
+import time
 
 app = FastAPI()
 
@@ -34,16 +35,24 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
     is_full = db.query(models.Vacancy).filter(models.Vacancy.email == e).all()
 
     if not is_full :
+        chromedriver_path = "chromedriver.exe"
+        options = Options()
+        options.add_argument("--headless")  # Запуск в фоновом режиме
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        service = Service(executable_path=chromedriver_path)
+
+        driver = webdriver.Chrome(service=service, options=options)
 
         # URL of the website to scrape
         url = "https://agropraktika.eu/vacancies?l=united-kingdom"
 
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
         
-        # Make a GET request to the website and parse the HTML using Beautiful Soup
-        html_text = requests.get(url, headers=headers).text
+        driver.get(url)
+        time.sleep(1)
+
+        html_text = driver.page_source
+
         soup = BeautifulSoup(html_text, 'lxml')
         print("im passed through here x1")
 
@@ -68,13 +77,13 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                 db.refresh(new_vacancy)
                 print("im passed through here x4")
                 # chromedriver path
-                chromedriver_path = "chromedriver.exe"
+                # chromedriver_path = "chromedriver.exe"
 
                 # Path of chromedriver
-                service = Service(executable_path=chromedriver_path)
+                # service = Service(executable_path=chromedriver_path)
 
                 # Create a new instance of the Chrome driver
-                driver = webdriver.Chrome(service=service)
+                # driver = webdriver.Chrome(service=service)
                 driver.get("https://agropraktika.eu/")  
 
                 # Find the login and password input fields and fill them in
