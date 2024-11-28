@@ -123,10 +123,9 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                         # # tap to apply button
                         # apply_button = driver.find_element(By.XPATH, "//button[contains(text(),'Подать заявку')]")
                         # apply_button.click()
-                        break
+                        return {"message": f"job successfully applied for user {e}"}
                     else:
-                        print("Couldn't login") 
-            driver.quit()        
+                        print("Couldn't login")         
         else:
             print("already applied!")
     finally:
