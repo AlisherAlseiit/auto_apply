@@ -88,7 +88,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     db.refresh(new_vacancy)
 
                     driver.get("https://agropraktika.eu/")  
-                    print({"message": driver.page_source})
+                    print({"message": soup})
                     # Find the login and password input fields and fill them in
                     email_input = driver.find_element(By.NAME, "email")
                     email_input.send_keys(e)
