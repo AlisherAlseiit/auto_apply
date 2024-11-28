@@ -45,7 +45,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
         # Find all the job vacancies on the page
         vacancies = soup.find_all('li', class_="vacancy-item")
-
+        print(vacancies)
         for vacancy in vacancies:
             print("im passed through here x2")
             vacancy_name = vacancy.find('h4', class_="mb-2").text
