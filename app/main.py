@@ -110,9 +110,9 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     # Wait for the page to load after login and get the current URL
                     
                     # WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.ID, "photo"))) 
-                    last_html = driver.page_source
-                    soup_last = BeautifulSoup(last_html, 'lxml')
-                    print({"messi": soup_last})
+                    # last_html = driver.page_source
+                    # soup_last = BeautifulSoup(last_html, 'lxml')
+                    # print({"messi": soup_last})
                     # Check if the current URL redirected to url
                     if driver.current_url in ["https://agropraktika.eu/user/applications", "https://agropraktika.eu/user/applications"]:
                         print("Login successful!")
@@ -128,7 +128,8 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                         # apply_button.click()
                         return {"message": f"job successfully applied for user {e}"}
                     else:
-                        print("Couldn't login")         
+                        print("Couldn't login") 
+                        return {"message": f"ERORR WHILE LOGIN IN {e} {driver.current_url}"}        
         else:
             print("already applied!")
     finally:
