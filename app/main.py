@@ -107,6 +107,12 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
 
 
 
+@app.get('/test')
+def test():
+    print("for testing only")
+
+
+
         
     
     
