@@ -51,7 +51,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
             options.add_argument("--headless")  # Запуск в фоновом режиме
             options.add_argument("--disable-gpu")
             options.add_argument("--no-sandbox")
-            options.add_argument("--disable-dev-shь-usage")
+            options.add_argument("--disable-dev-shm-usage")
             options.add_argument('--window-size=1420,1080')
             options.add_argument("--remote-debugging-port=9222")
             # options.add_argument("--disable-software-rasterizer")
@@ -97,13 +97,13 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     # Find the login and password input fields and fill them in
                     email_input = driver.find_element(By.NAME, "email")
                     email_input.send_keys(e)
-
+                    print({'e': e})
                     password_input = driver.find_element(By.NAME, "password")
                     password_input.send_keys(p)
-
+                    print({'p': p})
                     login_btn = driver.find_element(By.ID, "ugo1")
                     login_btn.click()
-
+                    print({'current url': driver.current_url})
                     # Wait for the page to load after login and get the current URL
                     
                     # WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.ID, "photo"))) 
