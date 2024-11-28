@@ -114,7 +114,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                     soup_last = BeautifulSoup(last_html, 'lxml')
                     print({"messi": soup_last})
                     # Check if the current URL redirected to url
-                    if driver.current_url == "https://agropraktika.eu/user/profile":
+                    if driver.current_url in ["https://agropraktika.eu/user/applications", "https://agropraktika.eu/user/applications"]:
                         print("Login successful!")
 
                         # Redirect to new vacancy's link
