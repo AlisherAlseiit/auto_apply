@@ -141,7 +141,7 @@ def apply(e: str, p: str, db: Session = Depends(get_db)):
                         payload = {
                             "token": settings.api_token,  # Ваш API токен
                             "user": settings.user_key,  # Ваш User ключ
-                            "message": "Ваша заявка была подана. Но возникли проблемы при регистрации" 
+                            "message": f"Есть открытая вакансия. Но возникли проблемы при регистрации аккаунта {new_vacancy.link}" 
                         }
                         requests.post("https://api.pushover.net:443/1/messages.json", data=payload)
 
